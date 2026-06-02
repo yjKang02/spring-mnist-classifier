@@ -2,11 +2,8 @@ package com.nhnacademy.aimnistpractice.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+
+import java.lang.annotation.*;
 
 // Constraint를 사용하여 Bean Validation 등록
 @Documented
