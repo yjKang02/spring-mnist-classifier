@@ -124,8 +124,9 @@
         try {
             const pixels = getSamplePixels(digit);
             drawPixelsToCanvas(pixels);
-            drawPreview(pixels);
-            await predictPixels(pixels);
+            const normalizedPixels = normalizeCanvas();
+            drawPreview(normalizedPixels);
+            await predictPixels(normalizedPixels);
         } catch (error) {
             setStatus(error.message, true);
         } finally {

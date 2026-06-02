@@ -8,7 +8,7 @@ import java.util.Map;
 @Service
 public class MnistSampleService {
 
-    private static final double BRUSH_RADIUS = 1.9;
+    private static final double BRUSH_RADIUS = 1.2;
     private static final double[][][] STROKES = {
             {
                     {14, 4, 9, 5, 6, 10, 5, 16, 7, 22, 12, 25, 18, 24, 22, 19, 23, 12, 20, 6, 14, 4}
