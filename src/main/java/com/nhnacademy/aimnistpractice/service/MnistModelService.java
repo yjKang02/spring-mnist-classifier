@@ -57,8 +57,8 @@ public class MnistModelService {
     private void trainAndSaveModel() throws IOException {
         int seed = 7919;
         int batchSize = 64;
-        int epoch = 100;
-        int patience = 10;
+        int epoch = 30;
+        int patience = 5;
 
         String modelPath = modelProperties.getModelPath();
 

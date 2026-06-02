@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNIST Classifier</title>
+    <link rel="stylesheet" th:href="@{/css/mnist.css}">
+    <script defer th:src="@{/js/mnist.js}"></script>
+</head>
+<body>
+<script id="mnistSamplesJson" type="application/json" th:utext="${samplesJson}">{}</script>
+<main class="mnist-page">
+    <header class="page-header">
+        <h1>MNIST Classifier</h1>
+    </header>
+
+    <section class="workspace" aria-label="MNIST 테스트 화면">
+        <aside class="sample-panel" aria-label="숫자 샘플">
+            <button class="sample-button" type="button" data-digit="0">0</button>
+            <button class="sample-button" type="button" data-digit="1">1</button>
+            <button class="sample-button" type="button" data-digit="2">2</button>
+            <button class="sample-button" type="button" data-digit="3">3</button>
+            <button class="sample-button" type="button" data-digit="4">4</button>
+            <button class="sample-button" type="button" data-digit="5">5</button>
+            <button class="sample-button" type="button" data-digit="6">6</button>
+            <button class="sample-button" type="button" data-digit="7">7</button>
+            <button class="sample-button" type="button" data-digit="8">8</button>
+            <button class="sample-button" type="button" data-digit="9">9</button>
+        </aside>
+
+        <section class="draw-panel" aria-label="숫자 입력">
+            <div class="canvas-toolbar">
+                <label class="brush-control" for="brushSize">
+                    <span>브러시</span>
+                    <input id="brushSize" type="range" min="8" max="36" value="22">
+                </label>
+                <button id="clearButton" class="secondary-button" type="button">지우기</button>
+                <button id="predictButton" class="primary-button" type="button">예측</button>
+            </div>
+
+            <div class="canvas-shell">
+                <canvas id="drawCanvas" class="draw-canvas" width="280" height="280" aria-label="숫자 그리기"></canvas>
+            </div>
+
+            <div class="preview-row">
+                <div>
+                    <strong>28 x 28</strong>
+                    <canvas id="previewCanvas" class="preview-canvas" width="140" height="140" aria-label="전처리 미리보기"></canvas>
+                </div>
+                <p id="statusText" class="status-text" role="status">대기 중</p>
+            </div>
+        </section>
+
+        <section class="result-panel" aria-label="예측 결과">
+            <div class="prediction-summary">
+                <span>예측</span>
+                <strong id="predictionValue">-</strong>
+            </div>
+            <div id="probabilityChart" class="probability-chart" aria-label="숫자별 예측 확률"></div>
+        </section>
+    </section>
+</main>
+</body>
+</html>
