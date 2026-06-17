@@ -56,22 +56,6 @@ Java Spring Boot와 Deeplearning4j를 사용해 손글씨 숫자를 분류하는
 
 <br>
 
-## Architecture
-
-```mermaid
-flowchart LR
-    A["User draws digit on Canvas"] --> B["JavaScript preprocessing"]
-    B --> C["28 x 28 normalized pixels"]
-    C --> D["POST /api/mnist/predict"]
-    D --> E["MnistController"]
-    E --> F["MnistModelService"]
-    F --> G["DL4J MultiLayerNetwork"]
-    G --> H["Prediction and probabilities"]
-    H --> I["Render result chart"]
-```
-
-<br>
-
 ## How It Works
 
 1. 사용자가 Canvas에 숫자를 그립니다.
