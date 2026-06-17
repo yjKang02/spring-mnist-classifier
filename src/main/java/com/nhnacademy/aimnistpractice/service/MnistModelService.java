@@ -3,6 +3,7 @@ package com.nhnacademy.aimnistpractice.service;
 import com.nhnacademy.aimnistpractice.config.ModelProperties;
 import com.nhnacademy.aimnistpractice.dto.MnistPredictionRequest;
 import com.nhnacademy.aimnistpractice.dto.MnistPredictionResponse;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.deeplearning4j.datasets.iterator.impl.MnistDataSetIterator;
@@ -26,8 +27,6 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -40,14 +39,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MnistModelService {
     private final ModelProperties modelProperties;
-    private MultiLayerNetwork trainedModel;
+    private volatile MultiLayerNetwork trainedModel;
 
-    @EventListener(ApplicationReadyEvent.class)
+    @PostConstruct
     public void initModel() throws IOException {
         File modelFile = new File(modelProperties.getModelPath());
         if(modelFile.exists()) {
             log.info("Load model from file {}", modelFile.getAbsolutePath());
             trainedModel = ModelSerializer.restoreMultiLayerNetwork(modelFile);
+            log.info("Model loaded successfully");
             return;
         }
         log.info("No model file found, Starting training...");
@@ -119,13 +119,14 @@ public class MnistModelService {
     }
 
     public MnistPredictionResponse predict(MnistPredictionRequest request) {
-        if (trainedModel == null) {
+        MultiLayerNetwork model = trainedModel;
+        if (model == null) {
             throw new IllegalStateException("MNIST model not found");
         }
 
         INDArray output;
         try (INDArray input = Nd4j.create(request.pixels()).reshape(1, 28L * 28)) {
-            output = trainedModel.output(input, false);
+            output = model.output(input, false);
         }
 
         double[] outputValues = output.toDoubleVector();
