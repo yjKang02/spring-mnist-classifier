@@ -17,9 +17,9 @@ Java Spring Boot와 Deeplearning4j를 사용해 손글씨 숫자를 분류하는
 
 ## Why This Project
 
-이 프로젝트는 단순히 MNIST 모델을 학습하는 데서 끝나지 않고, 학습된 모델을 웹 애플리케이션에서 사용할 수 있는 형태로 연결하는 것을 목표로 합니다.
+Spring Boot에서 AI를 어떻게 활용할 수 있는 지 학습하기 위한 간단한 프로젝트 입니다.
 
-- ML 모델을 Spring Boot 서비스 계층에서 로드하고 예측 API로 제공
+- ML 모델을 Spring Boot의 Service 계층에서 로드하고, Controller를 통해 API 호출
 - 브라우저 Canvas 입력을 모델 입력 형식에 맞게 전처리
 - 사용자 입력, API 요청, 모델 예측, 결과 시각화를 하나의 흐름으로 구현
 - 모델 파일이 없을 때 학습하고, 이후 실행에서는 저장된 모델을 재사용
@@ -28,18 +28,17 @@ Java Spring Boot와 Deeplearning4j를 사용해 손글씨 숫자를 분류하는
 
 ## Preview
 
-![](docs/resources/overview.png)
+![preview](docs/resources/preview.png)
 
 <br>
 
 ## Features
 
-- 브라우저 Canvas 기반 손글씨 숫자 입력
-- 숫자 샘플 버튼을 통한 빠른 예측 테스트
-- 입력 이미지를 MNIST 모델 형식인 `28 x 28` 픽셀 배열로 전처리
-- Deeplearning4j `MultiLayerNetwork` 기반 숫자 예측
-- 숫자별 예측 확률 시각화
 - 모델 파일이 존재하면 로드하고, 없으면 학습 후 저장
+- 브라우저 Canvas 기반 손글씨 숫자 입력
+- Deeplearning4j `MultiLayerNetwork` 기반 숫자 예측
+- 숫자 샘플 버튼을 통한 빠른 예측 테스트
+- 숫자별 예측 확률 시각화
 
 <br>
 
@@ -62,7 +61,7 @@ Java Spring Boot와 Deeplearning4j를 사용해 손글씨 숫자를 분류하는
 2. JavaScript가 숫자가 그려진 영역을 찾고 중앙 정렬합니다.
 3. 이미지를 `28 x 28` 크기로 축소합니다.
 4. 각 픽셀을 `0.0`부터 `1.0` 사이의 값으로 변환합니다.
-5. `/api/mnist/predict` API로 픽셀 배열을 전송합니다.
+5. `POST /api/mnist/predict` API로 픽셀 배열을 전송합니다.
 6. 서버는 학습된 MNIST 모델로 숫자를 예측합니다.
 7. 화면에 예측 숫자와 숫자별 확률을 표시합니다.
 
@@ -131,7 +130,7 @@ Content-Type: application/json
 
 ```json
 {
-  "pixels": [0.0, 0.0, 0.12, 0.85]
+  "pixels": [0.0, 0.0, 0.12, 0.85, ...] 
 }
 ```
 
