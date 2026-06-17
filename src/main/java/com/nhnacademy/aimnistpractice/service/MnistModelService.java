@@ -118,33 +118,32 @@ public class MnistModelService {
         log.info("Model Successfully saved: {}", modelPath);
     }
 
-    public MnistPredictionResponse predict(MnistPredictionRequest request) {
+    public synchronized MnistPredictionResponse predict(MnistPredictionRequest request) {
         MultiLayerNetwork model = trainedModel;
         if (model == null) {
             throw new IllegalStateException("MNIST model not found");
         }
 
-        INDArray output;
-        try (INDArray input = Nd4j.create(request.pixels()).reshape(1, 28L * 28)) {
-            output = model.output(input, false);
-        }
-
-        double[] outputValues = output.toDoubleVector();
-
-        if (outputValues.length < 10) {
-            throw new IllegalStateException("Invalid output value length. expect: 10, actual: " + outputValues.length);
-        }
-
-        Map<Integer, Double> probabilities = new LinkedHashMap<>();
-        int prediction = 0;
-        for (int digit = 0; digit < 10; digit++) {
-            double probability = outputValues[digit];
-            probabilities.put(digit, probability);
-            if (probability > outputValues[prediction]) {
-                prediction = digit;
+        try (
+                INDArray input = Nd4j.create(request.pixels()).reshape(1, 28L * 28);
+                INDArray output = model.output(input, false);
+        ) {
+            double[] outputValues = output.toDoubleVector();
+            if (outputValues.length < 10) {
+                throw new IllegalStateException("Invalid output value length. expect: 10, actual: " + outputValues.length);
             }
-        }
 
-        return new MnistPredictionResponse(prediction, probabilities);
+            Map<Integer, Double> probabilities = new LinkedHashMap<>();
+            int prediction = 0;
+            for (int digit = 0; digit < 10; digit++) {
+                double probability = outputValues[digit];
+                probabilities.put(digit, probability);
+                if (probability > outputValues[prediction]) {
+                    prediction = digit;
+                }
+            }
+
+            return new MnistPredictionResponse(prediction, probabilities);
+        }
     }
 }
